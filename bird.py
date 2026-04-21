@@ -1,4 +1,4 @@
-import pygame.image
+import pygame
 
 
 class Bird:
