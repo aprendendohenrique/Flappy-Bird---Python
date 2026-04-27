@@ -15,9 +15,18 @@ class Pipe(Sprite):
             self.image = pygame.image.load("images/pipe_top.bmp")
         else:
             self.image = pygame.image.load("images/pipe.bmp")
+        self.image_width = self.image.get_width()
+        self.image_height = self.image.get_height()
+        self.image = pygame.transform.scale(self.image, (
+            self.image_width * self.settings.objects_size_scale, self.image_height * self.settings.objects_size_scale))
 
         self.rect = self.image.get_rect()
 
         self.rect.right = self.screen_rect.right
 
         self.y = float(self.rect.y)
+
+    def update(self):
+        self.rect.x -= self.settings.pipe_speed
+        if self.rect.right < 0:
+            self.kill()

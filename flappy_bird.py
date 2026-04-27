@@ -17,14 +17,20 @@ class FlappyBird:
         self.settings = Settings()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(self.settings.screen_size)
+        self.screen_rect = self.screen.get_rect()
 
         self.bird = Bird(self)
+
         self.pipes = pygame.sprite.Group()
+        self.pipe_x_pos = self.screen_rect.right
+        self.tileset = int(self.settings.screen_height / 32)
+
         self.create_pipes()
 
     def run_game(self):
         while True:
             self.check_events()
+            self.update_pipes()
             self.update_screen()
             self.clock.tick(self.settings.fps)
 
@@ -48,24 +54,38 @@ class FlappyBird:
             self.bird.jump()
 
     def create_pipes(self):
-        tileset = int(self.settings.screen_height / 32)
-        random_pos = randint(1 + self.settings.opening_size, tileset-2)
+        self.pipes.empty()
+        for _ in range(self.settings.pipe_goal):
+            self.create_pipe()
+
+    def create_pipe(self):
+        random_pos = randint(1 + self.settings.opening_size, self.tileset - 2)
         for count in range(random_pos - self.settings.opening_size):
-            if count < random_pos-self.settings.opening_size-1:
-                print(count, random_pos)
+            if count < random_pos - self.settings.opening_size - 1:
                 new_pipe = Pipe(self)
             else:
                 new_pipe = Pipe(self, True)
                 new_pipe.image = pygame.transform.flip(new_pipe.image, False, True)
             new_pipe.rect.y = 32 * count
+            new_pipe.rect.right = self.pipe_x_pos
             self.pipes.add(new_pipe)
-        for count in range(tileset, random_pos, -1):
-            if count > random_pos+1:
+        for count in range(self.tileset, random_pos, -1):
+            if count > random_pos + 1:
                 new_pipe = Pipe(self)
             else:
                 new_pipe = Pipe(self, True)
             new_pipe.rect.y = 32 * count
+            new_pipe.rect.right = self.pipe_x_pos
             self.pipes.add(new_pipe)
+        self.pipe_x_pos += 32 * self.settings.objects_size_scale * self.settings.pipe_x_distance
+
+    def update_pipes(self):
+        self.pipes.update()
+        for pipe in self.pipes:
+            if pipe.rect.right <= 0:
+                pipe.kill()
+                self.create_pipe()
+
 
 fb = FlappyBird()
 fb.run_game()

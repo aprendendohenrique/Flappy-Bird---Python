@@ -8,7 +8,7 @@ class Settings:
         """Screen Settings"""
         self.objects_size_scale = 2
         self.screen_width = (32 * self.objects_size_scale) * 5
-        self.screen_height = (32 * self.objects_size_scale) *7
+        self.screen_height = (32 * self.objects_size_scale) * 7
         self.screen_size = (self.screen_width, self.screen_height)
         self.screen_color = (200, 200, 200)
 
@@ -21,3 +21,6 @@ class Settings:
         """Pipes settings"""
         # Integer Numbers
         self.opening_size = 4
+        self.pipe_x_distance = 3.5
+        self.pipe_goal = 15
+        self.pipe_speed = 2
