@@ -19,6 +19,8 @@ class FlappyBird:
         self.screen = pygame.display.set_mode(self.settings.screen_size)
         self.screen_rect = self.screen.get_rect()
 
+        self.game_over = False
+
         self.bird = Bird(self)
 
         self.pipes = pygame.sprite.Group()
@@ -30,15 +32,23 @@ class FlappyBird:
     def run_game(self):
         while True:
             self.check_events()
-            self.update_pipes()
+            if not self.game_over:
+                self.update_pipes()
+                self.bird.update()
             self.update_screen()
             self.clock.tick(self.settings.fps)
 
     def update_screen(self):
         self.screen.fill(self.settings.screen_color)
-        self.bird.update()
+        self.bird.blitme()
         self.pipes.draw(self.screen)
         pygame.display.flip()
+
+    def player_hit(self):
+        """Player hits the screen edge or any pipe"""
+        self.bird.position_bird()
+        self.create_pipes()
+
 
     def check_events(self):
         for event in pygame.event.get():
@@ -55,6 +65,7 @@ class FlappyBird:
 
     def create_pipes(self):
         self.pipes.empty()
+        self.pipe_x_pos = self.screen_rect.right
         for _ in range(self.settings.pipe_goal):
             self.create_pipe()
 
@@ -85,6 +96,8 @@ class FlappyBird:
             if pipe.rect.right <= 0:
                 pipe.kill()
                 self.create_pipe()
+        if pygame.sprite.spritecollideany(self.bird, self.pipes):
+            self.player_hit()
 
 
 fb = FlappyBird()
