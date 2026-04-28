@@ -3,6 +3,7 @@ import sys
 import pygame
 from random import randint
 
+from button import Button
 from settings import Settings
 
 from bird import Bird
@@ -19,9 +20,11 @@ class FlappyBird:
         self.screen = pygame.display.set_mode(self.settings.screen_size)
         self.screen_rect = self.screen.get_rect()
 
-        self.game_over = False
+        self.game_over = True
 
         self.bird = Bird(self)
+        self.button_msg = "Play"
+        self.button = Button(self, self.button_msg)
 
         self.pipes = pygame.sprite.Group()
         self.pipe_x_pos = self.screen_rect.right
@@ -40,6 +43,8 @@ class FlappyBird:
 
     def update_screen(self):
         self.screen.fill(self.settings.screen_color)
+        if self.game_over:
+            self.button.draw_button()
         self.bird.blitme()
         self.pipes.draw(self.screen)
         pygame.display.flip()
@@ -47,7 +52,9 @@ class FlappyBird:
     def player_hit(self):
         """Player hits the screen edge or any pipe"""
         self.bird.position_bird()
+        self.bird.rotate_bird(0)
         self.create_pipes()
+        self.game_over = True
 
 
     def check_events(self):
@@ -56,6 +63,11 @@ class FlappyBird:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self.keydown_event(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+
+                if self.button.rect.collidepoint(mouse_pos):
+                    self.game_over = False
 
     def keydown_event(self, event):
         if event.key == pygame.K_q:

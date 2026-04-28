@@ -14,8 +14,8 @@ class Settings:
 
         """Player Bird's Settings"""
         self.bird_x_offset = 1
-        self.starter_falling_speed = 5
-        self.jump_speed = 12
+        self.starter_falling_speed = 4
+        self.jump_speed = 10
         self.jump_speed_decay = 1
 
         """Pipes settings"""
@@ -23,4 +23,4 @@ class Settings:
         self.opening_size = 4
         self.pipe_x_distance = 3.5
         self.pipe_goal = 15
-        self.pipe_speed = 2
+        self.pipe_speed = 1.8
