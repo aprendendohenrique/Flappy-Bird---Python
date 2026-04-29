@@ -6,6 +6,7 @@ class Bird:
     """The class that manages the player's bird"""
 
     def __init__(self, fp_game):
+        """Initialize all the birds attributes."""
         self.fp_game = fp_game
         self.settings = fp_game.settings
         self.screen = fp_game.screen
@@ -29,9 +30,14 @@ class Bird:
         self.y = float(self.rect.y)
 
     def update(self):
+        """Updates the player main actions"""
         self.check_screen_edge()
+
+        # Makes the bird fall
         self.y += self.falling_speed
         self.rect.y = self.y
+
+        # Makes the bird jump, and fall again.
         if self.jumping:
             if self.falling_speed < self.settings.starter_falling_speed:
                 self.falling_speed += self.settings.jump_speed_decay
@@ -59,6 +65,7 @@ class Bird:
             self.fp_game.player_hit()
 
     def position_bird(self):
+        """Position the bird to its initial position."""
         self.rect.midleft = self.screen_rect.midleft
         self.y = float(self.rect.y)
         self.rect.x = self.rect.width * self.settings.bird_x_offset

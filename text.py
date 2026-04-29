@@ -1,5 +1,4 @@
 import pygame.font
-from pygame import font
 
 
 class Text:
@@ -14,6 +13,7 @@ class Text:
         self.text_color = text_color
         self.pos = pos
 
+        # Sets the font
         self.font = pygame.font.SysFont(None, font_size)
 
         self.prep_text(msg)

@@ -23,6 +23,7 @@ class Settings:
         """Pipes settings"""
         # Integer Numbers
         self.opening_size = 4
+
         self.pipe_x_distance = 3.5
         self.pipe_goal = 15
         self.pipe_speed = 1.8
