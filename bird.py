@@ -61,4 +61,4 @@ class Bird:
     def position_bird(self):
         self.rect.midleft = self.screen_rect.midleft
         self.y = float(self.rect.y)
-        self.rect.x += self.rect.width * self.settings.bird_x_offset
+        self.rect.x = self.rect.width * self.settings.bird_x_offset
