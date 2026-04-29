@@ -4,6 +4,7 @@ import pygame
 from random import randint
 from time import sleep
 
+import data
 from text import Text
 from button import Button
 from settings import Settings
@@ -27,6 +28,11 @@ class FlappyBird:
         self.button_msg = "Play"
         self.button = Button(self, self.button_msg)
 
+
+        score = data.load()
+        print(score)
+        if score:
+            self.settings.high_score = score
         self.score_text = Text(self, msg=self.settings.score, font_size=48,
                                text_color=(0, 0, 0), pos=(self.screen_rect.right-30, 35))
         self.high_score_text = Text(self, msg=self.settings.high_score, font_size=48,
@@ -129,6 +135,7 @@ class FlappyBird:
                     sc_check = True
                     if self.settings.score > self.settings.high_score:
                         self.settings.high_score = self.settings.score
+                        data.save(self.settings.high_score)
         if pygame.sprite.spritecollideany(self.bird, self.pipes):
             self.player_hit()
 

@@ -12,7 +12,7 @@ class Settings:
         self.screen_width = (32 * self.objects_size_scale) * 5
         self.screen_height = (32 * self.objects_size_scale) * 7
         self.screen_size = (self.screen_width, self.screen_height)
-        self.screen_color = (200, 200, 200)
+        self.screen_color = (0, 100, 255)
 
         """Player Bird's Settings"""
         self.bird_x_offset = 1
