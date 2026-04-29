@@ -23,7 +23,7 @@ class Button:
         # Builds the background surface
         self.surface = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
         self.surface.set_alpha(128)
-        self.surface.fill((100, 100, 100))
+        self.surface.fill((255, 255, 255))
 
         # The button message needs to prepped only once.
         self._prep_msg(msg)
@@ -36,6 +36,6 @@ class Button:
 
     def draw_button(self):
         """Draw blank button and then draw message."""
+        self.screen.blit(self.surface, (0, 0))
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
-        self.screen.blit(self.surface, (0, 0))
