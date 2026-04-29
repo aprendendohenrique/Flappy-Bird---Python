@@ -5,6 +5,7 @@ class Settings:
         """System Settings"""
         self.fps = 60
         self.score = 0
+        self.high_score = 0
 
         """Screen Settings"""
         self.objects_size_scale = 2

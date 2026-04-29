@@ -29,6 +29,8 @@ class FlappyBird:
 
         self.score_text = Text(self, msg=self.settings.score, font_size=48,
                                text_color=(0, 0, 0), pos=(self.screen_rect.right-30, 35))
+        self.high_score_text = Text(self, msg=self.settings.high_score, font_size=48,
+                                    text_color=(0, 0, 0), pos=(self.screen_rect.width/2, 35))
 
         self.pipes = pygame.sprite.Group()
         self.pipe_x_pos = self.screen_rect.right
@@ -47,11 +49,13 @@ class FlappyBird:
 
     def update_screen(self):
         self.screen.fill(self.settings.screen_color)
-        if self.game_over:
-            self.button.draw_button()
         self.bird.blitme()
         self.pipes.draw(self.screen)
-        self.score_text.show_text()
+        if self.game_over:
+            self.button.draw_button()
+            self.high_score_text.show_text()
+        else:
+            self.score_text.show_text()
         pygame.display.flip()
 
     def player_hit(self):
@@ -60,6 +64,7 @@ class FlappyBird:
         sleep(0.5)
         self.settings.score = 0
         self.score_text.prep_text(self.settings.score)
+        self.high_score_text.prep_text(self.settings.high_score)
         self.bird.rotate_bird(0)
         self.bird.position_bird()
         self.create_pipes()
@@ -122,6 +127,8 @@ class FlappyBird:
                     self.settings.score += 1
                     self.score_text.prep_text(self.settings.score)
                     sc_check = True
+                    if self.settings.score > self.settings.high_score:
+                        self.settings.high_score = self.settings.score
         if pygame.sprite.spritecollideany(self.bird, self.pipes):
             self.player_hit()
 
