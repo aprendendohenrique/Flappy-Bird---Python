@@ -2,6 +2,7 @@ import sys
 
 import pygame
 from random import randint
+from random import choice
 from time import sleep
 
 import data
@@ -17,6 +18,7 @@ class FlappyBird:
 
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         self.settings = Settings()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(self.settings.screen_size)
@@ -44,6 +46,21 @@ class FlappyBird:
 
         self.create_pipes()
 
+        # Music
+        pygame.mixer.music.load("music_sounds/intro_theme.mp3")
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
+
+        # Sounds
+        self.jump_sound_1 = pygame.mixer.Sound("music_sounds/jump_1.wav")
+        self.jump_sound_2 = pygame.mixer.Sound("music_sounds/jump_2.wav")
+        self.jump_sound_3 = pygame.mixer.Sound("music_sounds/jump_3.wav")
+        self.jump_sound_4 = pygame.mixer.Sound("music_sounds/jump_4.wav")
+        self.jump_sound_5 = pygame.mixer.Sound("music_sounds/jump_5.wav")
+        self.jump_sounds = [self.jump_sound_1, self.jump_sound_2, self.jump_sound_3,
+                            self.jump_sound_4, self.jump_sound_5]
+        self.hit_sound = pygame.mixer.Sound("music_sounds/hit.ogg")
+
     def run_game(self):
         while True:
             self.check_events()
@@ -67,7 +84,9 @@ class FlappyBird:
     def player_hit(self):
         """Player hits the screen edge or any pipe"""
         self.game_over = True
+        self.hit_sound.play()
         sleep(0.5)
+        pygame.mixer.music.unpause()
         self.settings.score = 0
         self.score_text.prep_text(self.settings.score)
         self.high_score_text.prep_text(self.settings.high_score)
@@ -86,6 +105,7 @@ class FlappyBird:
                 mouse_pos = pygame.mouse.get_pos()
 
                 if self.button.rect.collidepoint(mouse_pos):
+                    pygame.mixer.music.pause()
                     self.game_over = False
 
     def keydown_event(self, event):
@@ -93,7 +113,10 @@ class FlappyBird:
             sys.exit()
         if event.key == pygame.K_SPACE:
             self.bird.jump()
-            self.game_over = False
+            choice(self.jump_sounds).play()
+            if self.game_over:
+                pygame.mixer.music.pause()
+                self.game_over = False
 
     def create_pipes(self):
         self.pipes.empty()
